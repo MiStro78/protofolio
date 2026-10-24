@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en" x-data="app()" :class="{'dark':dark}" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Mohamed Khaled — Frontend and Backend Developer.">
+<meta name="keywords" content="developer, portfolio, Tailwind CSS, JavaScript">
+<meta name="author" content="Mohamed Khaled">
+<title>Mohamed Khaled</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: {
+        display: ['PT Sans', 'sans-serif'],
+        body: ['DM Sans', 'sans-serif']
+      },
+      colors: {
+        accent: '#A855F7',
+        'accent-light': '#C084FC'
+      }
+    }
+  }
+}
+</script>
+
+<style>
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: 'DM Sans', sans-serif;
+  background: #09090B;
+  color: #F4F4F5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'PT Sans', sans-serif;
+}
+
+body {
+  transition: background-color .3s, color .3s;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: .15;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #09090B;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #A855F7;
+  border-radius: 99px;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+.d1 { transition-delay: .08s; }
+.d2 { transition-delay: .16s; }
+.d3 { transition-delay: .24s; }
+.d4 { transition-delay: .32s; }
+
+.nl {
+  position: relative;
+}
+
+.nl::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #A855F7;
+  transition: width .22s ease;
+}
+
+.nl:hover::after,
+.nl.on::after {
+  width: 100%;
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: rgba(255,255,255,.18);
+  transform: skewX(-20deg);
+  transition: left .4s ease;
+}
+
+.shimmer:hover::after {
+  left: 160%;
+}
+
+.pf {
+  overflow: hidden;
+  background: #18181B;
+}
+
+.pf img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+[x-cloak] {
+  display: none !important;
+}
+
+/* Project cards */
+
+.project-card {
+  padding: 14px;
+  border: 1px solid #27272A;
+  border-radius: 22px;
+  background: #111014;
+  transition: transform .35s ease, border-color .35s ease,
+              background-color .35s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-8px);
+  border-color: #A855F7;
+  background: #181020;
+}
+
+.project-image {
+  position: relative;
+  height: 230px;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #27272A;
+}
+
+.project-image img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform .6s ease;
+}
+
+.project-card:hover .project-image img {
+  transform: scale(1.08);
+}
+
+.project-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(5,3,10,.78);
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity .3s ease;
+}
+
+.project-card:hover .project-overlay {
+  opacity: 1;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border: 1px solid #49335D;
+  border-radius: 999px;
+  color: #C084FC;
+  background: rgba(168,85,247,.10);
+  font-size: 11px;
+}
+
+.project-title {
+  margin-bottom: 10px;
+  color: #FAFAFA;
+  font-size: 22px;
+  font-weight: 700;
+  transition: color .3s ease;
+}
+
+.project-card:hover .project-title {
+  color: #C084FC;
+}
+
+.project-description {
+  min-height: 72px;
+  color: #A1A1AA;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.stag {
+  transition: border-color .18s;
+}
+
+@media (max-width: 640px) {
+  .project-image {
+    height: 220px;
+  }
+
+  .project-title {
+    font-size: 20px;
+  }
+
+  .project-description {
+    min-height: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
+
+  .project-card:hover {
+    transform: none;
+  }
+}
+</style>
+</head>
+
+<body class="bg-zinc-950 text-zinc-100 antialiased">
+
+<!-- NAVIGATION -->
+<header class="fixed inset-x-0 top-0 z-50 transition-all duration-300"
+  :class="sc ? 'bg-zinc-950/90 backdrop-blur-md shadow-lg shadow-black/20' : ''">
+
+  <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between"
+       aria-label="Main navigation">
+
+    <a href="#hero" class="font-display font-bold text-xl tracking-tight">
+      <span class="text-white">Moha</span><span class="text-purple-400">med</span>
+    </a>
+
+    <ul class="hidden md:flex items-center gap-8 text-sm" role="list">
+      <li><a href="#services" class="nl text-zinc-400 hover:text-white transition-colors">Services</a></li>
+      <li><a href="#work" class="nl text-zinc-400 hover:text-white transition-colors">Work</a></li>
+      <li><a href="#about" class="nl text-zinc-400 hover:text-white transition-colors">About</a></li>
+      <li><a href="#contact" class="nl text-zinc-400 hover:text-white transition-colors">Contact</a></li>
+    </ul>
+
+    <div class="flex items-center gap-3">
+      <a href="#contact"
+         class="hidden md:inline-flex items-center gap-2 shimmer bg-purple-600 text-white text-sm font-medium px-5 py-2 rounded-full hover:bg-purple-500 transition-colors">
+        Hire me <span>→</span>
+      </a>
+
+      <button @click="mm = !mm"
+              class="md:hidden w-9 h-9 flex items-center justify-center rounded-full border border-zinc-700"
+              :aria-expanded="mm"
+              aria-label="Toggle menu">
+
+        <svg x-show="!mm" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+
+        <svg x-show="mm" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div x-show="mm" x-cloak
+       x-transition
+       class="md:hidden bg-zinc-950 border-t border-zinc-800">
+
+    <ul class="flex flex-col px-6 py-5 gap-4 text-sm font-medium">
+      <li><a href="#services" @click="mm=false" class="block text-zinc-300 hover:text-purple-400">Services</a></li>
+      <li><a href="#work" @click="mm=false" class="block text-zinc-300 hover:text-purple-400">Work</a></li>
+      <li><a href="#about" @click="mm=false" class="block text-zinc-300 hover:text-purple-400">About</a></li>
+      <li><a href="#contact" @click="mm=false" class="block text-zinc-300 hover:text-purple-400">Contact</a></li>
+      <li>
+        <a href="#contact" @click="mm=false"
+           class="inline-flex shimmer bg-purple-600 text-white px-5 py-2.5 rounded-full">
+          Hire me →
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<main>
+
+<!-- HERO SECTION -->
+<section id="hero" class="relative min-h-screen flex items-center pt-16 overflow-hidden">
+
+  <div class="absolute top-1/4 right-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute bottom-1/4 left-0 w-64 h-64 bg-purple-900/20 rounded-full blur-3xl pointer-events-none"></div>
+
+  <div class="relative z-10 max-w-6xl mx-auto px-6 py-24 w-full">
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+
+      <div>
+        <p class="reveal text-sm font-medium text-purple-400 tracking-widest uppercase mb-4">
+          Available for work
+        </p>
+
+        <h1 class="reveal d1 font-display font-bold text-5xl md:text-6xl lg:text-7xl leading-tight tracking-tight text-white mb-6">
+          Hi, I'm <span class="text-purple-400">Mohamed Khaled</span>
+        </h1>
+
+        <p class="reveal d2 text-lg md:text-xl text-zinc-400 font-light leading-relaxed max-w-md mb-10">
+          Freelance <strong class="font-medium text-zinc-200">Backend &amp; Frontend Developer</strong>.
+          I design and build digital products that people love to use — fast, clean, and accessible.
+        </p>
+
+        <div class="reveal d3 flex flex-wrap gap-4">
+          <a href="#work"
+             class="shimmer inline-flex items-center gap-2 bg-purple-600 text-white font-medium px-7 py-3.5 rounded-full hover:bg-purple-500 transition-colors text-sm">
+            View my work <span>↓</span>
+          </a>
+
+          <a href="#contact"
+             class="inline-flex items-center gap-2 border border-zinc-700 text-zinc-300 font-medium px-7 py-3.5 rounded-full hover:border-purple-500 hover:bg-purple-500/10 transition-colors text-sm">
+            Get in touch
+          </a>
+        </div>
+
+        <div class="reveal d4 flex gap-8 mt-14 pt-8 border-t border-zinc-800">
+          <div>
+            <p class="font-display font-bold text-3xl text-white">8+</p>
+            <p class="text-xs text-zinc-400 mt-1">Projects done</p>
+          </div>
+
+          <div>
+            <p class="font-display font-bold text-3xl text-white">11+</p>
+            <p class="text-xs text-zinc-400 mt-1">Happy clients</p>
+          </div>
+
+          <div>
+            <p class="font-display font-bold text-3xl text-white">1y</p>
+            <p class="text-xs text-zinc-400 mt-1">Experience</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal d2 flex justify-center md:justify-end">
+        <div class="relative w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96">
+          <div class="pf w-full h-full rounded-3xl border border-zinc-800">
+            <img src="upload/WhatsApp Image 2026-10-24 at 9.51.49 AM.jpeg"
+                 alt="Mohamed Khaled"
+                 loading="eager">
+          </div>
+
+          <div class="absolute -bottom-4 -left-4 bg-purple-600 text-white font-display font-bold text-sm px-4 py-2.5 rounded-2xl shadow-lg shadow-purple-950/40">
+            Open to projects
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES SECTION -->
+<section id="services" class="py-24 bg-black">
+  <div class="max-w-6xl mx-auto px-6">
+
+    <div class="mb-12">
+      <p class="text-xs font-medium text-purple-400 tracking-widest uppercase mb-3">What I do</p>
+      <h2 class="font-display font-bold text-4xl md:text-5xl text-white">
+        My <span class="text-purple-400">Services.</span>
+      </h2>
+      <p class="text-zinc-400 mt-5 max-w-xl leading-relaxed">
+        I build modern websites and useful web applications with a focus on responsive design and clean code.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+
+      <article class="project-card">
+        <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center mb-5">
+          <svg class="w-6 h-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                  d="M4 5h16v14H4zM4 9h16M8 7h.01M6 7h.01"/>
+          </svg>
+        </div>
+        <h3 class="project-title">Frontend Development</h3>
+        <p class="project-description">
+          Responsive websites with modern layouts, smooth interactions, and user-friendly interfaces.
+        </p>
+      </article>
+
+      <article class="project-card">
+        <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center mb-5">
+          <svg class="w-6 h-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <ellipse cx="12" cy="5" rx="8" ry="3" stroke-width="1.8"/>
+            <path stroke-width="1.8" d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3"/>
+          </svg>
+        </div>
+        <h3 class="project-title">Backend Development</h3>
+        <p class="project-description">
+          Learning backend development and building practical features for web applications.
+        </p>
+      </article>
+
+      <article class="project-card">
+        <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center mb-5">
+          <svg class="w-6 h-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                  d="M12 3l2.5 5.5L20 11l-5.5 2.5L12 19l-2.5-5.5L4 11l5.5-2.5L12 3z"/>
+          </svg>
+        </div>
+        <h3 class="project-title">UI Implementation</h3>
+        <p class="project-description">
+          Turning ideas into clean, accessible, and visually consistent website interfaces.
+        </p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- SELECTED WORK -->
+<section id="work" class="relative py-28 bg-zinc-950 text-white overflow-hidden">
+
+  <div class="absolute top-20 left-0 w-72 h-72 bg-purple-500/10 rounded-full blur-[120px]"></div>
+  <div class="absolute bottom-20 right-0 w-72 h-72 bg-purple-500/10 rounded-full blur-[120px]"></div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-6">
+
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
+      <div>
+        <p class="text-purple-400 text-sm uppercase tracking-[5px] mb-4">My Portfolio</p>
+        <h2 class="text-4xl md:text-6xl font-bold tracking-tight">
+          Selected <span class="text-purple-400">Work.</span>
+        </h2>
+        <p class="text-zinc-400 mt-5 max-w-lg leading-7">
+          A collection of projects I've built using modern web technologies,
+          focusing on clean design, performance, and user experience.
+        </p>
+      </div>
+
+      <span class="text-zinc-500 text-sm border border-zinc-800 rounded-full px-5 py-3 w-fit">
+        06 Projects — 2026
+      </span>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
+
+      <!-- PROJECT 1 -->
+      <article class="project-card group">
+        <div class="project-image">
+          <img src="upload/لقطة شاشة 2026-10-24 100725.png"
+               alt="Marvel Heroes website" loading="lazy">
+          <a href="https://mistro78.github.io/marvel/"
+             target="_blank" rel="noopener noreferrer"
+             class="project-overlay">View Project ↗</a>
+        </div>
+
+        <div class="pt-5">
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span class="tag">HTML</span>
+            <span class="tag">CSS</span>
+            <span class="tag">Entertainment</span>
+          </div>
+          <h3 class="project-title">Marvel Heroes</h3>
+          <p class="project-description">
+            Explore Marvel heroes, their origin stories, and the world of the Marvel Cinematic Universe.
+          </p>
+        </div>
+      </article>
+
+      <!-- PROJECT 2 -->
+      <article class="project-card group">
+        <div class="project-image">
+          <img src="upload/لقطة شاشة 2026-10-24 105109.png"
+               alt="E-commerce website" loading="lazy">
+          <a href="https://mistro78.github.io/index/"
+             target="_blank" rel="noopener noreferrer"
+             class="project-overlay">View Project ↗</a>
+        </div>
+
+        <div class="pt-5">
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span class="tag">Tailwind CSS</span>
+            <span class="tag">Wow.js</span>
+          </div>
+          <h3 class="project-title">E-commerce Store</h3>
+          <p class="project-description">
+            A modern website concept with a clean interface and responsive layouts for different screen sizes.
+          </p>
+        </div>
+      </article>
+
+      <!-- PROJECT 3 -->
+      <article class="project-card group">
+        <div class="project-image">
+          <img src="upload/لقطة شاشة 2026-10-24 110202.png"
+               alt="Profit calculator application" loading="lazy">
+          <a href="https://mistro78.github.io/profite/"
+             target="_blank" rel="noopener noreferrer"
+             class="project-overlay">View Project ↗</a>
+        </div>
+
+        <div class="pt-5">
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span class="tag">JavaScript</span>
+            <span class="tag">CSS</span>
+          </div>
+          <h3 class="project-title">Profit Calculator</h3>
+          <p class="project-description">
+            Calculate product profits and losses with a simple, interactive interface.
+          </p>
+        </div>
+      </article>
+
+      <!-- PROJECT 4 -->
+      <article class="project-card group">
+        <div class="project-image">
+          <img src="upload/لقطة شاشة 2026-10-24 123039.png"
+               alt="Sebha application" loading="lazy">
+          <a href="https://mistro78.github.io/sebha/"
+             target="_blank" rel="noopener noreferrer"
+             class="project-overlay">View Project ↗</a>
+        </div>
+
+        <div class="pt-5">
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span class="tag">JavaScript</span>
+            <span class="tag">CSS</span>
+          </div>
+          <h3 class="project-title">Sebha</h3>
+          <p class="project-description">
+            New and modern Sebha application built using JavaScript and CSS.
+          </p>
+        </div>
+      </article>
+
+      <!-- PROJECT 5 -->
+      <article class="project-card group">
+        <div class="project-image">
+          <img src="upload/لقطة شاشة 2026-10-24 124115.png"
+               alt="CRUD application" loading="lazy">
+          <a href="https://mistro78.github.io/crud/"
+             target="_blank" rel="noopener noreferrer"
+             class="project-overlay">View Project ↗</a>
+        </div>
+
+        <div class="pt-5">
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span class="tag">JavaScript</span>
+            <span class="tag">CSS</span>
+          </div>
+          <h3 class="project-title">CRUD</h3>
+          <p class="project-description">
+            A modern and simple CRUD project you can use in a dashboard.
+          </p>
+        </div>
+      </article>
+
+      <!-- PROJECT 6 -->
+      <article class="project-card group">
+        <div class="project-image">
+          <img src="upload/لقطة شاشة 2026-10-24 124901.png"
+               alt="Tasbeh application" loading="lazy">
+          <a href="https://mistro78.github.io/tasbeh/"
+             target="_blank" rel="noopener noreferrer"
+             class="project-overlay">View Project ↗</a>
+        </div>
+
+        <div class="pt-5">
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span class="tag">HTML</span>
+            <span class="tag">CSS</span>
+            <span class="tag">JavaScript</span>
+          </div>
+          <h3 class="project-title">Tasbeh</h3>
+          <p class="project-description">
+            The rosary is online, allowing you to seek forgiveness via your cell phone in an easy and wonderful way.
+            Make forgiveness one of your habits, so that God may honor us and you.
+          </p>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="mt-16 text-center">
+      <p class="text-zinc-400 mb-5">Have a project in mind?</p>
+      <a href="#contact"
+         class="inline-flex items-center gap-3 bg-purple-600 hover:bg-purple-500 text-white font-semibold px-8 py-4 rounded-full transition-all duration-300 hover:-translate-y-1">
+        Let's Work Together <span>↗</span>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ABOUT SECTION -->
+<section id="about" class="py-24 bg-black">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="grid md:grid-cols-2 gap-16 items-center">
+
+      <div class="reveal order-2 md:order-1">
+        <div class="pf w-full aspect-square max-w-sm mx-auto rounded-3xl border border-zinc-800">
+          <img src="upload/WhatsApp Image 2026-10-24 at 9.51.49 AM.jpeg"
+               alt="Mohamed Khaled" loading="lazy">
+        </div>
+      </div>
+
+      <div class="order-1 md:order-2">
+        <p class="reveal text-xs font-medium text-purple-400 tracking-widest uppercase mb-3">
+          About me
+        </p>
+
+        <h2 class="reveal d1 font-display font-bold text-4xl md:text-5xl text-white leading-tight mb-6">
+          A bit about<br>who I am
+        </h2>
+
+        <p class="reveal d2 text-zinc-400 leading-relaxed mb-4">
+          I'm Mohamed Khaled. I'm a Frontend Developer and I'm learning Backend.
+          I'm from Egypt, and I thrive at the intersection of great design and clean code.
+        </p>
+
+        <p class="reveal d3 text-zinc-400 leading-relaxed mb-8">
+          I believe great interfaces are invisible — they get out of the user's way.
+          My work is fast, accessible and built to last.
+          When I'm not coding, you'll find me hiking or hunting for a good espresso.
+        </p>
+
+        <div class="reveal d4">
+          <p class="text-xs font-medium text-zinc-400 uppercase tracking-widest mb-3">
+            Stack &amp; tools
+          </p>
+
+          <div class="flex flex-wrap gap-2" role="list" aria-label="Skills">
+            <span role="listitem" class="stag text-sm bg-zinc-900 border border-zinc-800 text-zinc-300 px-3.5 py-1.5 rounded-full hover:border-purple-500">HTML</span>
+            <span role="listitem" class="stag text-sm bg-zinc-900 border border-zinc-800 text-zinc-300 px-3.5 py-1.5 rounded-full hover:border-purple-500">CSS</span>
+            <span role="listitem" class="stag text-sm bg-zinc-900 border border-zinc-800 text-zinc-300 px-3.5 py-1.5 rounded-full hover:border-purple-500">Bootstrap</span>
+            <span role="listitem" class="stag text-sm bg-zinc-900 border border-zinc-800 text-zinc-300 px-3.5 py-1.5 rounded-full hover:border-purple-500">Tailwind</span>
+            <span role="listitem" class="stag text-sm bg-zinc-900 border border-zinc-800 text-zinc-300 px-3.5 py-1.5 rounded-full hover:border-purple-500">JavaScript</span>
+            <span role="listitem" class="stag text-sm bg-zinc-900 border border-zinc-800 text-zinc-300 px-3.5 py-1.5 rounded-full hover:border-purple-500">SweetAlert</span>
+            <span role="listitem" class="stag text-sm bg-zinc-900 border border-zinc-800 text-zinc-300 px-3.5 py-1.5 rounded-full hover:border-purple-500">Wow.js</span>
+            <span role="listitem" class="stag text-sm bg-zinc-900 border border-zinc-800 text-zinc-300 px-3.5 py-1.5 rounded-full hover:border-purple-500">React.js</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT SECTION -->
+<section id="contact" class="py-24 bg-zinc-950">
+  <div class="max-w-6xl mx-auto px-6">
+
+    <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-10 md:p-16 relative overflow-hidden">
+
+      <div class="absolute top-0 right-0 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute bottom-0 left-0 w-40 h-40 bg-purple-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+      <div class="relative z-10 grid md:grid-cols-2 gap-12 items-start">
+
+        <div>
+          <p class="reveal text-xs font-medium text-purple-400 tracking-widest uppercase mb-3">
+            Get in touch
+          </p>
+
+          <h2 class="reveal d1 font-display font-bold text-4xl md:text-5xl text-white leading-tight mb-5">
+            Let's work<br>together
+          </h2>
+
+          <p class="reveal d2 text-zinc-400 leading-relaxed mb-8">
+            I'm open to frontend missions, short or long-term.
+            Landing page, full product redesign, or just a second pair of eyes — let's talk.
+          </p>
+
+          <div class="reveal d3 flex flex-col gap-4">
+
+            <a href="mailto:mohamedkhaled50pp@gmail.com"
+               class="group flex items-center gap-3 text-zinc-400 hover:text-white transition-colors">
+
+              <span class="w-9 h-9 flex items-center justify-center bg-zinc-800 rounded-lg group-hover:bg-purple-500/20 transition-colors shrink-0">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                </svg>
+              </span>
+
+              <span class="text-sm">mohamedkhaled50pp@gmail.com</span>
+            </a>
+
+            <a href="https://www.linkedin.com/in/mohamed-khaled-3a8ba1437/"
+               rel="noopener noreferrer" target="_blank"
+               class="group flex items-center gap-3 text-zinc-400 hover:text-white transition-colors">
+
+              <span class="w-9 h-9 flex items-center justify-center bg-zinc-800 rounded-lg group-hover:bg-purple-500/20 transition-colors shrink-0">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                </svg>
+              </span>
+
+              <span class="text-sm">LinkedIn</span>
+            </a>
+
+            <a href="https://github.com/MiStro78"
+               rel="noopener noreferrer" target="_blank"
+               class="group flex items-center gap-3 text-zinc-400 hover:text-white transition-colors">
+
+              <span class="w-9 h-9 flex items-center justify-center bg-zinc-800 rounded-lg group-hover:bg-purple-500/20 transition-colors shrink-0">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 0C5.373 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.565 22.844 24 17.347 24 12 24 5.373 18.627 0 12 0z"/>
+                </svg>
+              </span>
+
+              <span class="text-sm">GitHub</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="reveal d2">
+          <form id="contact-form">
+            <div class="flex flex-col gap-4">
+
+              <div class="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label for="fname" class="block text-xs font-medium text-zinc-400 mb-1.5">
+                    Name *
+                  </label>
+                  <input type="text" id="fname" name="name"
+                         placeholder="Your name" required autocomplete="name"
+                         class="w-full bg-zinc-800 border border-zinc-700 text-white text-sm rounded-xl px-4 py-3 placeholder-zinc-500 focus:outline-none focus:border-purple-500 transition-colors">
+                </div>
+
+                <div>
+                  <label for="femail" class="block text-xs font-medium text-zinc-400 mb-1.5">
+                    Email *
+                  </label>
+                  <input type="email" id="femail" name="email"
+                         placeholder="you@example.com" required autocomplete="email"
+                         class="w-full bg-zinc-800 border border-zinc-700 text-white text-sm rounded-xl px-4 py-3 placeholder-zinc-500 focus:outline-none focus:border-purple-500 transition-colors">
+                </div>
+              </div>
+
+              <div>
+                <label for="fsubject" class="block text-xs font-medium text-zinc-400 mb-1.5">
+                  Subject
+                </label>
+                <input type="text" id="fsubject" name="subject"
+                       placeholder="Project inquiry"
+                       class="w-full bg-zinc-800 border border-zinc-700 text-white text-sm rounded-xl px-4 py-3 placeholder-zinc-500 focus:outline-none focus:border-purple-500 transition-colors">
+              </div>
+
+              <div>
+                <label for="fmessage" class="block text-xs font-medium text-zinc-400 mb-1.5">
+                  Message *
+                </label>
+                <textarea id="fmessage" name="message" rows="4"
+                          placeholder="Tell me about your project..." required
+                          class="w-full bg-zinc-800 border border-zinc-700 text-white text-sm rounded-xl px-4 py-3 placeholder-zinc-500 focus:outline-none focus:border-purple-500 transition-colors resize-none"></textarea>
+              </div>
+
+              <button type="submit"
+                      class="shimmer w-full bg-purple-600 text-white font-display font-bold text-sm py-3.5 rounded-xl hover:bg-purple-500 transition-colors">
+                Send message →
+              </button>
+
+              <p id="form-message" class="text-sm text-purple-300" aria-live="polite"></p>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="border-t border-zinc-800 bg-black">
+  <div class="max-w-6xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+
+    <p class="text-sm text-zinc-400">
+      © <span id="yr"></span> Mohamed. All rights reserved.
+      <span class="block mt-1">
+        Developed by
+        <a href="https://www.linkedin.com/in/mohamed-khaled-3a8ba1437/"
+           target="_blank" rel="noopener noreferrer"
+           class="font-bold text-purple-400 hover:text-purple-300">
+          Mohamed Khaled
+        </a>
+      </span>
+    </p>
+
+    <p class="text-xs text-zinc-500">
+      Built with
+      <a href="https://tailwindcss.com"
+         rel="noopener noreferrer" target="_blank"
+         class="hover:text-purple-400 transition-colors">Tailwind CSS</a>
+      and
+      <a href="https://alpinejs.dev"
+         rel="noopener noreferrer" target="_blank"
+         class="hover:text-purple-400 transition-colors">Alpine.js</a>
+    </p>
+
+  </div>
+</footer>
+
+<script>
+function app() {
+  return {
+    dark: true,
+    mm: false,
+    sc: false,
+    s: 'hero',
+
+    init() {
+      // Keep the black and purple theme enabled.
+      this.dark = true;
+
+      // Update navigation background on scroll.
+      window.addEventListener('scroll', () => {
+        this.sc = window.scrollY > 20;
+        this.updateSection();
+      }, { passive: true });
+
+      // Reveal elements as they enter the viewport.
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+            io.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -40px 0px'
+      });
+
+      document.querySelectorAll('.reveal').forEach(el => {
+        io.observe(el);
+      });
+
+      // Current year.
+      document.getElementById('yr').textContent = new Date().getFullYear();
+
+      // Contact form: open the visitor's email application.
+      const form = document.getElementById('contact-form');
+
+      form.addEventListener('submit', event => {
+        event.preventDefault();
+
+        const name = document.getElementById('fname').value.trim();
+        const email = document.getElementById('femail').value.trim();
+        const subject = document.getElementById('fsubject').value.trim();
+        const message = document.getElementById('fmessage').value.trim();
+
+        const emailSubject = encodeURIComponent(
+          subject || 'Portfolio contact from ' + name
+        );
+
+        const emailBody = encodeURIComponent(
+          'Name: ' + name + '\n' +
+          'Email: ' + email + '\n\n' +
+          message
+        );
+
+        document.getElementById('form-message').textContent =
+          'Opening your email application...';
+
+        window.location.href =
+          'mailto:mohamedkhaled50pp@gmail.com?subject=' +
+          emailSubject + '&body=' + emailBody;
+      });
+    },
+
+    updateSection() {
+      const atBottom =
+        window.innerHeight + window.scrollY >=
+        document.body.scrollHeight - 60;
+
+      if (atBottom) {
+        this.s = 'contact';
+        return;
+      }
+
+      const ids = [
+        'contact',
+        'about',
+        'work',
+        'services',
+        'hero'
+      ];
+
+      for (const id of ids) {
+        const el = document.getElementById(id);
+
+        if (el && window.scrollY >= el.offsetTop - 130) {
+          this.s = id;
+          return;
+        }
+      }
+    }
+  }
+}
+</script>
+
+</body>
+</html>
